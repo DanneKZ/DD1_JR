@@ -1,0 +1,36 @@
+{
+  "projects": [
+    {
+      "name": "Knightfall (Auth)",
+      "progress": 89,
+      "priority": "P0 - High",
+      "status": "🏗️ Working",
+      "eta": "2 Days",
+      "color": "var(--neon-purple)"
+    },
+    {
+      "name": "Shield AI Bot",
+      "progress": 10,
+      "priority": "P1 - Med",
+      "status": "⏳ Waiting",
+      "eta": "2 Days",
+      "color": "var(--neon-blue)"
+    },
+    {
+      "name": "Blooket Hack",
+      "progress": 80,
+      "priority": "P2 - Low",
+      "status": "⏳ Later",
+      "eta": "2 Weeks",
+      "color": "var(--neon-purple)"
+    },
+    {
+      "name": "My Website",
+      "progress": 40,
+      "priority": "P1 - High",
+      "status": "🏗️ Working",
+      "eta": "1 Week",
+      "color": "var(--neon-blue)"
+    }
+  ]
+}
