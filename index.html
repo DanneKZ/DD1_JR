@@ -21,7 +21,6 @@
             overflow-x: hidden;
         }
 
-        /* Matrix Rain Canvas */
         #matrix-canvas {
             position: fixed;
             top: 0;
@@ -30,11 +29,11 @@
             opacity: 0.4; 
         }
 
-        /* [Visitor Counter] - النسخة المصلحة والمبسطة */
+        /* [Visitor Counter] - الآن في أقصى اليمين */
         .visitor-counter-fixed {
             position: fixed;
             top: 15px;
-            left: 310px; /* تم تحريكه لليسار لكي لا يغطي الأزرار */
+            right: 20px; /* تم نقله لليمين تماماً */
             z-index: 2000;
             display: flex;
             align-items: center;
@@ -47,7 +46,6 @@
             box-shadow: 0 0 10px rgba(188, 19, 254, 0.3);
         }
 
-        /* UI Controls */
         .ui-controls {
             position: fixed;
             top: 15px;
@@ -77,8 +75,6 @@
             color: white;
             box-shadow: 0 0 15px var(--neon-purple);
         }
-
-        .ui-controls button.off { border-color: #444; color: #444; }
 
         #system-logs {
             position: fixed;
@@ -200,7 +196,7 @@
     
     <div class="visitor-counter-fixed">
         <span style="color: var(--neon-purple); font-size: 0.7rem;">[TRAFFIC]</span>
-        <img src="https://komarev.com/ghpvc/?username=DanneKZ-JR&color=bc13fe&style=flat-square&label=VISITS" alt="Visits">
+        <img src="https://komarev.com/ghpvc/?username=Daniel-DD1JR-Stats&color=bc13fe&style=flat-square&label=VISITS" alt="Visits">
     </div>
 
     <div id="system-logs"></div>
@@ -314,12 +310,10 @@
             if (isMatrixOn) {
                 canvas.style.display = "block";
                 btn.innerHTML = '<i class="fas fa-code"></i> Matrix: ON';
-                btn.classList.remove('off');
                 matrixInterval = setInterval(drawMatrix, 40);
             } else {
                 canvas.style.display = "none";
                 btn.innerHTML = '<i class="fas fa-code"></i> Matrix: OFF';
-                btn.classList.add('off');
                 clearInterval(matrixInterval);
             }
         }
@@ -343,11 +337,9 @@
             if (logsBox.style.display === "none") {
                 logsBox.style.display = "block";
                 btn.innerHTML = '<i class="fas fa-terminal"></i> Logs: ON';
-                btn.classList.remove('off');
             } else {
                 logsBox.style.display = "none";
                 btn.innerHTML = '<i class="fas fa-terminal"></i> Logs: OFF';
-                btn.classList.add('off');
             }
         }
 
