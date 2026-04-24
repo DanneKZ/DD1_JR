@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --neon-purple: #bc13fe; /* بنفسجي فاتح ونيون أكثر */
+            --neon-purple: #bc13fe; 
             --neon-blue: #00d2ff;
             --bg-dark: #050505;
             --card-bg: rgba(10, 10, 10, 0.85);
@@ -21,13 +21,13 @@
             overflow-x: hidden;
         }
 
-        /* Matrix Rain Canvas المطور */
+        /* Matrix Rain Canvas */
         #matrix-canvas {
             position: fixed;
             top: 0;
             left: 0;
             z-index: -1;
-            opacity: 0.4; /* زيادة الشفافية ليكون أوضح */
+            opacity: 0.4; 
         }
 
         /* UI Controls */
@@ -176,6 +176,21 @@
         .social-bar a { color: #888; font-size: 1.5rem; transition: 0.3s; }
         .social-bar a:hover { color: var(--neon-blue); transform: scale(1.2); }
 
+        /* Visitor Counter Styling */
+        .visitor-counter {
+            margin-top: 30px;
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid #222;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
         footer { padding: 40px; text-align: center; color: #444; font-size: 0.8rem; }
     </style>
 </head>
@@ -222,6 +237,11 @@
             </div>
         </div>
 
+        <div class="visitor-counter">
+            <span style="color: var(--neon-purple);">[TRAFFIC_MONITOR]:</span>
+            <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fdannekz.github.io%2FDD1_JR&count_bg=%23bc13fe&title_bg=%23000000&icon=&icon_color=%23E7E7E7&title=VISITS&edge_flat=false" alt="Visitor Count">
+        </div>
+
         <div class="stats-container">
             <div class="stat-item">
                 <span class="stat-value">4+</span>
@@ -257,7 +277,6 @@
     </footer>
 
     <script>
-        // 1. Matrix Rain Script المطور (أكثر إشراقاً)
         const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
         let matrixInterval;
@@ -266,16 +285,16 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*";
-        const fontSize = 18; // تكبير الخط قليلاً
+        const fontSize = 18; 
         const columns = canvas.width / fontSize;
         const drops = [];
         for (let i = 0; i < columns; i++) drops[i] = 1;
 
         function drawMatrix() {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.08)"; // توازن الخلفية
+            ctx.fillStyle = "rgba(0, 0, 0, 0.08)"; 
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
-            ctx.shadowBlur = 8; // إضافة تأثير التوهج النيوني
+            ctx.shadowBlur = 8; 
             ctx.shadowColor = "#bc13fe";
             ctx.fillStyle = "#bc13fe"; 
             ctx.font = "bold " + fontSize + "px monospace";
@@ -286,7 +305,7 @@
                 if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
                 drops[i]++;
             }
-            ctx.shadowBlur = 0; // إيقاف التوهج لباقي العناصر
+            ctx.shadowBlur = 0; 
         }
         
         matrixInterval = setInterval(drawMatrix, 40);
@@ -307,7 +326,6 @@
             }
         }
 
-        // 2. System Logs Script
         const logsBox = document.getElementById('system-logs');
         const messages = [
             "[INFO] Initializing system...",
@@ -343,7 +361,6 @@
             }
         }
 
-        // 3. Data Fetch
         fetch('data.json')
             .then(response => response.json())
             .then(data => {
@@ -360,7 +377,8 @@
                         </div>
                     `;
                 });
-            });
+            })
+            .catch(err => console.log("Waiting for data.json..."));
     </script>
 </body>
 </html>
