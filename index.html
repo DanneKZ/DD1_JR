@@ -360,5 +360,18 @@
                 });
             }).catch(err => console.log("Waiting for data.json..."));
     </script>
+    <div id="secret-gate" 
+     onclick="window.location.href='https://dannekz.github.io/research-lab-v1/'" 
+     style="position: fixed; bottom: 0; right: 0; width: 20px; height: 20px; cursor: pointer; z-index: 9999; background: rgba(188, 19, 254, 0.05);">
+</div>
+
+<script>
+    // اختصار الكيبورد: اضغط حرف S لفتح البوابة
+    document.addEventListener('keydown', function(e) {
+        if (e.key.toLowerCase() === 's') {
+            window.location.href = "https://dannekz.github.io/research-lab-v1/";
+        }
+    });
+</script>
 </body>
 </html>
