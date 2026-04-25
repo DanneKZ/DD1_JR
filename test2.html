@@ -3,217 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DD1_JR | ELITE ARCHITECT</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Plus+Jakarta+Sans:wght@300;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <title>DD1_JR | Multiverse Interface</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
     <style>
+        /* [1] نظام الثيمات المتقدم */
         :root[data-theme="dark"] {
-            --bg: #030305; --card: rgba(15, 15, 22, 0.8); --text: #f0f0f0;
-            --neon: #bc13fe; --accent: #00d2ff; --border: #1a1a2e;
-            --subtext: #888; --glow: rgba(188, 19, 254, 0.4);
+            --bg: #020202; --card-bg: rgba(8, 8, 8, 0.95);
+            --text: #ffffff; --subtext: #888888;
+            --neon-purple: #bc13fe; --neon-blue: #00d2ff;
+            --border: rgba(188, 19, 254, 0.3); --matrix-op: 0.35;
         }
 
         :root[data-theme="light"] {
-            --bg: #f8f9fa; --card: rgba(255, 255, 255, 0.9); --text: #1a1a1a;
-            --neon: #6e00ff; --accent: #0055ff; --border: #e0e0e0;
-            --subtext: #666; --glow: rgba(110, 0, 255, 0.15);
+            --bg: #f0f2f5; --card-bg: rgba(255, 255, 255, 0.98);
+            --text: #1a1a1a; --subtext: #555555;
+            --neon-purple: #7a00cc; --neon-blue: #0077ff;
+            --border: rgba(0, 0, 0, 0.1); --matrix-op: 0.1;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.4s cubic-bezier(0.2, 0, 0.2, 1); }
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: background 0.5s, color 0.5s; }
 
         body {
             background-color: var(--bg); color: var(--text);
-            font-family: 'Plus Jakarta Sans', sans-serif; overflow-x: hidden;
-            cursor: none;
+            font-family: 'JetBrains Mono', monospace; overflow-x: hidden;
         }
 
-        /* الماوس المطور */
-        #cursor {
-            position: fixed; width: 8px; height: 8px; background: var(--neon);
-            border-radius: 50%; pointer-events: none; z-index: 10000;
+        /* [2] مؤثرات التحميل والنيون */
+        #intro-overlay {
+            position: fixed; inset: 0; background: #000; z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
-        #cursor-aura {
-            position: fixed; width: 40px; height: 40px; border: 1px solid var(--neon);
-            border-radius: 50%; pointer-events: none; z-index: 9999;
-            transition: transform 0.15s ease-out, width 0.3s, height 0.3s;
-        }
+        .intro-logo { font-family: 'Orbitron'; font-size: 4rem; text-shadow: 0 0 20px var(--neon-purple); animation: flicker 2s infinite; }
+        @keyframes flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
 
-        #matrix-canvas { position: fixed; inset: 0; z-index: -1; opacity: 0.2; }
-
-        /* الهيدر وزر التبديل */
-        nav {
-            position: fixed; top: 0; width: 100%; padding: 25px 50px;
-            display: flex; justify-content: space-between; align-items: center; z-index: 5000;
-            backdrop-filter: blur(10px); border-bottom: 1px solid var(--border);
+        /* [3] زر التبديل (التحسين المطلوب) */
+        .theme-switch {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 5000;
+            background: var(--card-bg); border: 1px solid var(--neon-blue);
+            padding: 8px 20px; border-radius: 50px; cursor: pointer;
+            display: flex; align-items: center; gap: 10px; font-family: 'Orbitron'; font-size: 0.7rem;
+            box-shadow: 0 0 15px var(--neon-blue);
         }
 
-        .theme-btn {
-            background: var(--card); border: 1px solid var(--border);
-            padding: 10px 20px; border-radius: 12px; cursor: pointer;
-            display: flex; align-items: center; gap: 10px; font-family: 'Orbitron';
-            font-size: 0.7rem; color: var(--text); box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-        .theme-btn:hover { border-color: var(--neon); transform: scale(1.05); }
+        #matrix-canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: var(--matrix-op); pointer-events: none; }
 
-        /* شبكة المحتوى */
-        .main-wrapper {
-            max-width: 1300px; margin: 120px auto; padding: 20px;
-            display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px;
+        /* [4] الكروت (المؤثرات المضافة) */
+        section { padding: 100px 20px; display: flex; flex-direction: column; align-items: center; max-width: 1200px; margin: 0 auto; }
+
+        .identity-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px; width: 100%; margin-top: 40px; perspective: 1000px;
         }
 
-        .hero-card {
-            grid-column: span 8; background: var(--card); border: 1px solid var(--border);
-            padding: 50px; border-radius: 30px; display: flex; align-items: center; gap: 40px;
-            position: relative; overflow: hidden;
+        .terminal-box {
+            background: var(--card-bg); border: 1px solid var(--border);
+            padding: 30px; border-radius: 20px; position: relative;
+            transform-style: preserve-3d; transition: transform 0.1s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
-        .side-card { grid-column: span 4; background: var(--card); border: 1px solid var(--border); padding: 30px; border-radius: 30px; }
-        .small-card { grid-column: span 3; background: var(--card); border: 1px solid var(--border); padding: 25px; border-radius: 25px; text-align: center; }
-        .medium-card { grid-column: span 6; background: var(--card); border: 1px solid var(--border); padding: 30px; border-radius: 30px; }
-
-        /* تفاصيل الكروت */
-        .profile-img {
-            width: 150px; height: 150px; border-radius: 50%;
-            border: 4px solid var(--neon); padding: 5px;
-            box-shadow: 0 0 30px var(--glow);
+        .terminal-box:hover {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 30px var(--border);
         }
 
-        .hero-text h1 { font-family: 'Orbitron'; font-size: 3.5rem; margin-bottom: 10px; }
-        .badge {
-            background: var(--glow); color: var(--neon); padding: 5px 15px;
-            border-radius: 20px; font-size: 0.7rem; font-weight: bold; font-family: 'Orbitron';
+        .bio-key { color: var(--neon-purple); font-weight: bold; }
+
+        /* [5] الكروت الجديدة */
+        .info-card {
+            background: var(--card-bg); border: 1px solid var(--border);
+            padding: 20px; border-radius: 15px; margin-top: 25px; width: 100%;
+            display: flex; justify-content: space-around; text-align: center;
+        }
+        .stat-val { font-family: 'Orbitron'; font-size: 1.5rem; color: var(--neon-blue); display: block; }
+
+        /* اللوجات */
+        #system-logs {
+            position: fixed; bottom: 20px; right: 20px; width: 280px; height: 150px;
+            background: rgba(0,0,0,0.8); border-radius: 10px; padding: 15px;
+            font-size: 0.7rem; color: var(--neon-blue); overflow: hidden; z-index: 100;
+            border: 1px solid var(--border); backdrop-filter: blur(5px);
         }
 
-        /* مهارات التقدم */
-        .skill-row { margin-bottom: 20px; }
-        .skill-info { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.8rem; }
-        .bar-bg { background: var(--border); height: 6px; border-radius: 10px; overflow: hidden; }
-        .bar-fill { height: 100%; background: linear-gradient(90deg, var(--neon), var(--accent)); width: 0; }
-
-        /* أيقونات التواصل */
-        .social-link {
-            width: 50px; height: 50px; display: inline-flex; align-items: center; justify-content: center;
-            border-radius: 15px; border: 1px solid var(--border); font-size: 1.2rem;
-            margin-right: 10px; color: var(--text); text-decoration: none;
+        .social-bar a {
+            color: var(--text); font-size: 1.5rem; margin: 0 15px;
+            transition: 0.3s;
         }
-        .social-link:hover { background: var(--neon); color: white; transform: translateY(-5px); border-color: var(--neon); }
+        .social-bar a:hover { color: var(--neon-purple); transform: scale(1.2); }
 
-        /* الحركات */
-        .hover-effect:hover {
-            border-color: var(--neon); box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            transform: translateY(-5px);
-        }
-
-        #status-bar {
-            position: fixed; bottom: 0; width: 100%; background: var(--card);
-            padding: 8px 30px; border-top: 1px solid var(--border);
-            display: flex; justify-content: space-between; font-size: 0.65rem;
-            font-family: 'JetBrains Mono'; color: var(--subtext); z-index: 5000;
-        }
-
-        @media (max-width: 992px) { .hero-card, .side-card, .small-card, .medium-card { grid-column: span 12; } }
+        footer { margin-top: 50px; padding: 30px; opacity: 0.5; font-size: 0.7rem; letter-spacing: 2px; }
 
     </style>
 </head>
 <body>
 
-    <div id="cursor"></div>
-    <div id="cursor-aura"></div>
+    <div id="intro-overlay">
+        <div class="intro-logo">DD1_JR</div>
+        <div style="width: 200px; height: 2px; background: #222; margin-top: 20px;">
+            <div id="bar" style="width: 0%; height: 100%; background: var(--neon-purple); box-shadow: 0 0 15px var(--neon-purple);"></div>
+        </div>
+    </div>
+
     <canvas id="matrix-canvas"></canvas>
 
-    <nav>
-        <div style="font-family: 'Orbitron'; font-weight: 900; letter-spacing: 2px;">DD1_JR <span style="color: var(--neon);">.OS</span></div>
-        <div class="theme-btn" onclick="toggleTheme()">
-            <i id="theme-icon" class="fas fa-moon"></i>
-            <span>SYSTEM THEME</span>
-        </div>
-    </nav>
-
-    <div class="main-wrapper">
-        <div class="hero-card hover-effect">
-            <img src="https://api.dicebear.com/7.x/bottts-neutral/svg?seed=Daniel" class="profile-img" alt="Daniel">
-            <div class="hero-text">
-                <span class="badge">SENIOR DEVELOPER</span>
-                <h1>Daniel</h1>
-                <p style="color: var(--subtext); max-width: 450px;">A creative mind specialized in <b>LUA Scripting</b>, Cyber Security, and building high-end digital experiences.</p>
-                <div style="margin-top: 25px;">
-                    <a href="https://github.com/DanneKZ" class="social-link"><i class="fab fa-github"></i></a>
-                    <a href="https://discord.com/users/1336353146020298816" class="social-link"><i class="fab fa-discord"></i></a>
-                    <a href="#" class="social-link"><i class="fas fa-envelope"></i></a>
-                </div>
-            </div>
-        </div>
-
-        <div class="side-card hover-effect">
-            <h3 style="margin-bottom: 25px; font-family: 'Orbitron'; font-size: 0.9rem;">LIVE_TELEMETRY</h3>
-            <div class="skill-row">
-                <div class="skill-info"><span>LUA Engine</span><span>95%</span></div>
-                <div class="bar-bg"><div class="bar-fill" style="width: 95%;"></div></div>
-            </div>
-            <div class="skill-row">
-                <div class="skill-info"><span>Cyber Defense</span><span>88%</span></div>
-                <div class="bar-bg"><div class="bar-fill" style="width: 88%;"></div></div>
-            </div>
-            <div class="skill-row">
-                <div class="skill-info"><span>Web Architecture</span><span>82%</span></div>
-                <div class="bar-bg"><div class="bar-fill" style="width: 82%;"></div></div>
-            </div>
-        </div>
-
-        <div class="small-card hover-effect">
-            <div style="font-size: 2rem; font-weight: 900; color: var(--neon);">15</div>
-            <div style="font-size: 0.6rem; color: var(--subtext); letter-spacing: 2px;">YEARS_OLD</div>
-        </div>
-        <div class="small-card hover-effect">
-            <div style="font-size: 2rem; font-weight: 900; color: var(--accent);">04+</div>
-            <div style="font-size: 0.6rem; color: var(--subtext); letter-spacing: 2px;">BIG_PROJECTS</div>
-        </div>
-        <div class="small-card hover-effect">
-            <div style="font-size: 2rem; font-weight: 900; color: var(--neon);">3.2k</div>
-            <div style="font-size: 0.6rem; color: var(--subtext); letter-spacing: 2px;">LINES_SYNCED</div>
-        </div>
-        <div class="small-card hover-effect">
-            <div style="font-size: 2rem; font-weight: 900; color: var(--accent);">18ms</div>
-            <div style="font-size: 0.6rem; color: var(--subtext); letter-spacing: 2px;">AVG_LATENCY</div>
-        </div>
-
-        <div class="medium-card hover-effect">
-            <h3 style="color: var(--neon); margin-bottom: 15px;"><i class="fas fa-shield-halved"></i> SENTINEL PROJECT</h3>
-            <p style="font-size: 0.9rem; color: var(--subtext);">My advanced Discord security bot. Built to protect communities from malicious links and unauthorized intrusions.</p>
-            <a href="https://top.gg/bot/1488965929810526308" style="color: var(--accent); text-decoration: none; font-size: 0.8rem; display: block; margin-top: 15px; font-weight: bold;">VIEW REPOSITORY →</a>
-        </div>
-
-        <div class="medium-card hover-effect">
-            <h3 style="color: var(--accent); margin-bottom: 15px;"><i class="fas fa-code-branch"></i> MTA/FiveM SCRIPTS</h3>
-            <p style="font-size: 0.9rem; color: var(--subtext);">High-performance server-side scripts optimized for hundreds of concurrent players. Focus on stability and custom UX.</p>
-            <div style="display: flex; gap: 10px; margin-top: 15px;">
-                <span style="font-size: 0.6rem; border: 1px solid var(--border); padding: 4px 10px; border-radius: 5px;">MYSQL</span>
-                <span style="font-size: 0.6rem; border: 1px solid var(--border); padding: 4px 10px; border-radius: 5px;">VECTOR3</span>
-                <span style="font-size: 0.6rem; border: 1px solid var(--border); padding: 4px 10px; border-radius: 5px;">ASYNC</span>
-            </div>
-        </div>
+    <div class="theme-switch" onclick="toggleTheme()">
+        <i id="theme-icon" class="fas fa-moon"></i>
+        <span>SWITCH DIMENSION</span>
     </div>
 
-    <div id="status-bar">
-        <div><i class="fas fa-wifi"></i> CONNECTED: DD1_NODE_SWEDEN</div>
-        <div id="clock">00:00:00</div>
-        <div>STABLE_VERSION_2.0.4</div>
-    </div>
+    <div id="system-logs"></div>
+
+    <section>
+        <div style="text-align: center;">
+            <h1 style="font-family: 'Orbitron'; font-size: 5rem; letter-spacing: 10px; margin-bottom: 10px;">DANIEL</h1>
+            <div class="social-bar">
+                <a href="https://github.com/DanneKZ" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="https://discord.com/users/1336353146020298816" target="_blank"><i class="fab fa-discord"></i></a>
+            </div>
+        </div>
+
+        <div class="identity-grid">
+            <div class="terminal-box" id="card1">
+                <div style="color:var(--neon-blue); font-size: 0.7rem; margin-bottom: 15px;">[ DATA_ENCRYPTED ]</div>
+                <div class="bio-line"><span class="bio-key">> ROOT:</span> Daniel</div>
+                <div class="bio-line"><span class="bio-key">> AGE:</span> 15 Cycles</div>
+                <div class="bio-line"><span class="bio-key">> LOC:</span> Sweden_Node 🇸🇪</div>
+            </div>
+
+            <div class="terminal-box" id="card2">
+                <div style="color:var(--neon-purple); font-size: 0.7rem; margin-bottom: 15px;">[ SKILLS_STRIKE ]</div>
+                <div class="bio-line"><span class="bio-key">> DEV:</span> LUA, JS, HTML/CSS</div>
+                <div class="bio-line"><span class="bio-key">> OPS:</span> Cyber Security</div>
+                <div class="bio-line"><span class="bio-key">> STATUS:</span> Advanced Learner</div>
+            </div>
+
+            <div class="terminal-box" id="card3">
+                <div style="color:var(--neon-blue); font-size: 0.7rem; margin-bottom: 15px;">[ FUTURE_CORE ]</div>
+                <div class="bio-line"><span class="bio-key">> TARGET:</span> AI Integration</div>
+                <div class="bio-line"><span class="bio-key">> PROJECT:</span> Sentinel v3.0</div>
+                <div class="bio-line"><span class="bio-key">> MISSION:</span> Secure Net</div>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <div><span class="stat-val">04+</span><span style="font-size: 0.6rem;">DEPLOYMENTS</span></div>
+            <div><span class="stat-val">100%</span><span style="font-size: 0.6rem;">UPTIME</span></div>
+            <div><span class="stat-val" id="ping">20ms</span><span style="font-size: 0.6rem;">LATENCY</span></div>
+        </div>
+
+        <div class="terminal-box" style="width: 100%; margin-top: 25px; display: flex; align-items: center; justify-content: space-between;">
+            <div>
+                <h3 style="color: var(--neon-blue); font-family: 'Orbitron';">SENTINEL BOT</h3>
+                <p style="color: var(--subtext); font-size: 0.8rem;">Automated security module for Discord systems.</p>
+            </div>
+            <a href="https://top.gg/bot/1488965929810526308" target="_blank" style="background: var(--neon-purple); color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 0.8rem;">EXECUTE</a>
+        </div>
+    </section>
+
+    <footer>// SYSTEM_OPERATIONAL_2026 // BY_DANIEL //</footer>
 
     <script>
-        // [1] Matrix Engine
+        // [1] مصفوفة الماتريكس
         const canvas = document.getElementById('matrix-canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        const letters = "01DANIEL01JR";
+        const letters = "01010101DD1JR";
         const fontSize = 16;
         const columns = canvas.width / fontSize;
         const drops = Array(Math.floor(columns)).fill(1);
 
         function drawMatrix() {
-            ctx.fillStyle = document.documentElement.getAttribute('data-theme') === 'dark' ? "rgba(3, 3, 5, 0.15)" : "rgba(248, 249, 250, 0.15)";
+            ctx.fillStyle = document.documentElement.getAttribute('data-theme') === 'dark' ? "rgba(2, 2, 2, 0.1)" : "rgba(240, 242, 245, 0.1)";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = document.documentElement.getAttribute('data-theme') === 'dark' ? "#bc13fe" : "#6e00ff";
+            ctx.fillStyle = document.documentElement.getAttribute('data-theme') === 'dark' ? "#bc13fe" : "#7a00cc";
             ctx.font = fontSize + "px monospace";
             drops.forEach((y, i) => {
                 const text = letters[Math.floor(Math.random() * letters.length)];
@@ -224,44 +187,62 @@
         }
         setInterval(drawMatrix, 50);
 
-        // [2] Theme Toggle
+        // [2] تبديل الثيم
         function toggleTheme() {
             const root = document.documentElement;
             const icon = document.getElementById('theme-icon');
-            const isDark = root.getAttribute('data-theme') === 'dark';
-            root.setAttribute('data-theme', isDark ? 'light' : 'dark');
-            icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+            if (root.getAttribute('data-theme') === 'dark') {
+                root.setAttribute('data-theme', 'light');
+                icon.className = 'fas fa-sun';
+                pushLog("Dimension Switched: LIGHT_MODE");
+            } else {
+                root.setAttribute('data-theme', 'dark');
+                icon.className = 'fas fa-moon';
+                pushLog("Dimension Switched: DARK_MODE");
+            }
         }
 
-        // [3] Custom Cursor
-        const cursor = document.getElementById('cursor');
-        const aura = document.getElementById('cursor-aura');
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-            aura.style.left = (e.clientX - 20) + 'px';
-            aura.style.top = (e.clientY - 20) + 'px';
-        });
-
-        // [4] Clock
-        setInterval(() => {
-            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
-        }, 1000);
-
-        // [5] Magnetic Effect for Cards
-        document.querySelectorAll('.hover-effect').forEach(card => {
+        // [3] تتبع الماوس للكروت (Tilt Effect)
+        document.querySelectorAll('.terminal-box').forEach(card => {
             card.addEventListener('mousemove', (e) => {
                 const rect = card.getBoundingClientRect();
-                const x = (e.clientX - rect.left - rect.width/2) / 20;
-                const y = (e.clientY - rect.top - rect.height/2) / 20;
-                card.style.transform = `translate(${x}px, ${y}px) translateY(-5px)`;
-                aura.style.width = '60px'; aura.style.height = '60px';
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 10;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
             });
             card.addEventListener('mouseleave', () => {
-                card.style.transform = `translate(0, 0)`;
-                aura.style.width = '40px'; aura.style.height = '40px';
+                card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) translateY(0)`;
             });
         });
+
+        // [4] التحميل
+        let p = 0;
+        const loader = setInterval(() => {
+            p += 10;
+            document.getElementById('bar').style.width = p + "%";
+            if (p >= 100) {
+                clearInterval(loader);
+                setTimeout(() => {
+                    document.getElementById('intro-overlay').style.opacity = '0';
+                    setTimeout(() => document.getElementById('intro-overlay').style.display = 'none', 500);
+                }, 500);
+            }
+        }, 100);
+
+        // [5] لوجات النظام
+        const logs = document.getElementById('system-logs');
+        function pushLog(msg) {
+            const div = document.createElement('div');
+            div.innerHTML = `> ${msg}`;
+            logs.appendChild(div);
+            if (logs.childNodes.length > 5) logs.firstChild.remove();
+        }
+        setInterval(() => pushLog("NODE_SIGNAL_STABLE_" + Math.floor(Math.random()*99)), 4000);
+
     </script>
 </body>
 </html>
