@@ -3,181 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DD1_JR | Cyber Operations</title>
+    <title>DD1_JR | CYBER SYSTEM</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* إعادة الألوان والهوية الأصلية لموقع دانيال */
         :root {
-            --neon-purple: #bc13fe; 
+            --neon-purple: #bc13fe;
             --neon-blue: #00d2ff;
             --bg-dark: #050505;
-            --card-bg: rgba(10, 10, 10, 0.85);
         }
 
-        body {
+        body, html {
+            margin: 0; padding: 0;
             background-color: var(--bg-dark);
             color: white;
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            overflow: hidden; /* يفتح بعد الانترو */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
         }
 
-        /* --- [1] نظام الانترو الماتريكس (الذي أعجبك) --- */
-        #intro-wrapper {
-            position: fixed;
-            inset: 0;
-            z-index: 10000;
-            background: black;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: opacity 1.5s ease;
+        /* --- [1] INTRO ANIMATION --- */
+        #intro-overlay {
+            position: fixed; inset: 0; z-index: 9999; background: black;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
-        #intro-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-        .terminal-box {
-            position: relative; z-index: 10001;
-            background: rgba(0, 0, 0, 0.9);
-            border: 2px solid var(--neon-purple);
-            padding: 30px;
-            text-align: center;
-            box-shadow: 0 0 40px var(--neon-purple);
+        #intro-canvas { position: absolute; inset: 0; opacity: 0.6; }
+        .intro-box {
+            z-index: 10000; border: 2px solid var(--neon-purple); padding: 30px;
+            background: rgba(0,0,0,0.9); box-shadow: 0 0 30px var(--neon-purple);
+            text-align: center; font-family: monospace;
         }
 
-        /* --- [2] العودة لتصميم دانيال الأصلي --- */
-        #matrix-canvas-bg {
-            position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.4; 
-        }
+        /* --- [2] MATRIX BACKGROUND --- */
+        #bg-canvas { position: fixed; top: 0; left: 0; z-index: -1; }
 
-        .visitor-counter-fixed {
-            position: fixed; top: 15px; right: 20px; z-index: 2000;
-            display: flex; align-items: center; gap: 5px;
-            background: rgba(0, 0, 0, 0.8); padding: 5px 10px;
-            border-radius: 5px; border: 1px solid var(--neon-purple);
+        /* --- [3] HEADER CONTROLS --- */
+        .top-nav {
+            display: flex; justify-content: space-between; padding: 20px;
+            position: sticky; top: 0; z-index: 100;
         }
-
-        #system-logs {
-            position: fixed; bottom: 20px; right: 20px;
-            width: 250px; height: 150px; background: rgba(0, 0, 0, 0.9);
-            border: 1px solid var(--neon-blue); border-radius: 10px;
-            padding: 10px; font-family: monospace; font-size: 0.7rem; color: var(--neon-blue);
-            z-index: 100;
+        .toggle-btns { display: flex; gap: 10px; }
+        .btn-toggle {
+            background: rgba(0,0,0,0.6); border: 1px solid var(--neon-purple);
+            color: white; padding: 5px 15px; cursor: pointer; font-family: monospace;
+            border-radius: 4px; font-size: 0.8rem;
         }
+        .btn-toggle.active { box-shadow: 0 0 10px var(--neon-purple); }
 
-        section { padding: 40px 20px; display: flex; flex-direction: column; align-items: center; }
-        .neon-title {
-            font-size: clamp(3rem, 10vw, 5rem); font-weight: 900;
+        /* --- [4] MAIN CONTENT (YOUR ORIGINAL DESIGN) --- */
+        .main-container { width: 90%; max-width: 1200px; margin: 0 auto; opacity: 0; transition: 2s; }
+        
+        .header-section { text-align: center; margin-bottom: 40px; }
+        .main-title { 
+            font-size: 5rem; margin: 0; font-weight: 900;
             background: linear-gradient(to right, var(--neon-blue), var(--neon-purple));
-            -webkit-background-clip: text; background-clip: text;
-            -webkit-text-fill-color: transparent; text-transform: uppercase;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
 
-        .identity-wrapper {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 20px; width: 100%; max-width: 1000px; margin-top: 40px;
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        .card { 
+            background: rgba(15, 15, 15, 0.8); border: 1px solid #333; 
+            padding: 20px; border-radius: 12px; position: relative;
         }
+        .card-header { color: var(--neon-blue); font-family: monospace; font-size: 0.9rem; margin-bottom: 15px; border-bottom: 1px solid #222; }
 
-        .terminal-box-main {
-            background: var(--card-bg); border: 1px solid #333;
-            padding: 25px; border-radius: 15px;
-        }
+        .bio-line { margin: 8px 0; font-size: 1rem; }
+        .bio-key { color: var(--neon-purple); font-weight: bold; margin-right: 5px; }
 
-        .terminal-header { color: var(--neon-blue); font-family: monospace; border-bottom: 1px solid #333; margin-bottom: 10px; }
-        .bio-line { margin: 10px 0; }
-        .bio-key { color: var(--neon-purple); font-weight: bold; }
+        /* Stats Row */
+        .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 30px; }
+        .stat-card { background: rgba(10,10,10,0.9); border: 1px dashed var(--neon-purple); text-align: center; padding: 20px; border-radius: 10px; }
+        .stat-val { font-size: 1.8rem; font-weight: bold; color: var(--neon-blue); display: block; }
+        .stat-lbl { font-size: 0.7rem; color: #777; text-transform: uppercase; }
 
-        /* الأقسام الأخرى التي كانت في صورك */
-        .stats-container {
-            width: 100%; max-width: 1000px;
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px; margin-top: 20px;
+        /* Bot Operations Card */
+        .bot-ops-card {
+            background: rgba(15, 15, 15, 0.9); border: 1px solid var(--neon-blue);
+            padding: 20px; border-radius: 15px; display: flex; align-items: center;
+            gap: 20px; margin-bottom: 30px;
         }
-        .stat-item {
-            background: rgba(15, 15, 15, 0.9); border: 1px dashed var(--neon-purple);
-            padding: 15px; border-radius: 10px; text-align: center;
-        }
+        .bot-icon { font-size: 3rem; color: var(--neon-blue); }
+        .btn-topgg { background: var(--neon-blue); color: black; border: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; cursor: pointer; margin-left: auto; }
 
-        .ops-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px; width: 100%; max-width: 1000px; margin-top: 20px;
-        }
+        /* Projects Grid */
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .prog-bar { background: #111; height: 8px; border-radius: 10px; margin: 15px 0; overflow: hidden; }
+        .prog-fill { height: 100%; background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)); }
 
-        .project-card {
-            background: var(--card-bg); border: 1px solid #333;
-            padding: 20px; border-radius: 15px;
+        /* Terminal Logs */
+        #logs-panel {
+            position: fixed; bottom: 20px; right: 20px; width: 300px; height: 180px;
+            background: rgba(0,0,0,0.9); border: 1px solid var(--neon-blue);
+            padding: 15px; font-family: monospace; font-size: 0.75rem; overflow: hidden;
+            display: flex; flex-direction: column-reverse; box-shadow: 0 0 15px rgba(0,210,255,0.2);
         }
-        .progress-bg { background: #111; height: 10px; border-radius: 5px; margin: 10px 0; overflow: hidden; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)); }
     </style>
 </head>
 <body>
 
-    <div id="intro-wrapper">
+    <div id="intro-overlay">
         <canvas id="intro-canvas"></canvas>
-        <div class="terminal-box">
-            <h2 style="color: var(--neon-purple); font-family: 'Orbitron';">INITIALIZING DD1_JR</h2>
-            <p style="color: var(--neon-blue); font-size: 0.8rem;">LINKING TO SATELLITE... [OK]</p>
+        <div class="intro-box">
+            <h2 id="intro-text">CONNECTING TO DATABASE...</h2>
+            <div style="width: 200px; height: 2px; background: #222; margin: 20px auto;">
+                <div id="loader-bar" style="width: 0%; height: 100%; background: var(--neon-purple); transition: 0.5s;"></div>
+            </div>
         </div>
     </div>
 
-    <canvas id="matrix-canvas-bg"></canvas>
-    
-    <div class="visitor-counter-fixed">
-        <span style="color: var(--neon-purple); font-size: 0.7rem;">[TRAFFIC]</span>
-        <img src="https://komarev.com/ghpvc/?username=Daniel-DD1JR-Stats&color=bc13fe&style=flat-square&label=VISITS">
+    <canvas id="bg-canvas"></canvas>
+
+    <div class="top-nav">
+        <div class="toggle-btns">
+            <button class="btn-toggle active" onclick="toggleMatrix()">MATRIX: ON</button>
+            <button class="btn-toggle active" onclick="toggleLogs()">LOGS: ON</button>
+        </div>
+        <div class="btn-toggle" style="border-color: var(--neon-blue)">TRAFFIC | VISITS: 0</div>
     </div>
 
-    <div id="system-logs"></div>
-
-    <section id="hero">
-        <h1 class="neon-title">DD1_JR</h1>
-        
-        <div class="identity-wrapper">
-            <div class="terminal-box-main">
-                <div class="terminal-header">> USER_IDENTITY_DATA</div>
-                <div class="bio-line"><span class="bio-key">> NAME:</span> Daniel (DD1_JR)</div>
-                <div class="bio-line"><span class="bio-key">> ORIGIN:</span> Iraqi Roots 🇮🇶</div>
-                <div class="bio-line"><span class="bio-key">> LIVE:</span> Sweden 🇸🇪</div>
+    <div class="main-container" id="site-content">
+        <div class="header-section">
+            <div style="font-size: 3rem; color: var(--neon-purple); margin-bottom: -20px;">D</div>
+            <h1 class="main-title">DD1_JR</h1>
+            <div style="margin-top: 10px;">
+                <i class="fab fa-github" style="margin: 0 10px; cursor: pointer;"></i>
+                <i class="fab fa-discord" style="margin: 0 10px; cursor: pointer;"></i>
+                <i class="fas fa-shield-alt" style="margin: 0 10px; cursor: pointer;"></i>
             </div>
-            <div class="terminal-box-main">
-                <div class="terminal-header" style="color: var(--neon-purple);">> CORE_SKILLS</div>
+        </div>
+
+        <div class="info-grid">
+            <div class="card">
+                <div class="card-header">> USER_IDENTITY_DATA</div>
+                <div class="bio-line"><span class="bio-key">> NAME:</span> Daniel (DD1_JR)</div>
+                <div class="bio-line"><span class="bio-key">> AGE:</span> 15 Years Old</div>
+                <div class="bio-line"><span class="bio-key">> ORIGIN:</span> Iraqi Roots 🇮🇶</div>
+                <div class="bio-line"><span class="bio-key">> BORN:</span> Netherlands 🇳🇱 | <span class="bio-key">LIVE:</span> Sweden 🇸🇪</div>
+            </div>
+            <div class="card">
+                <div class="card-header">> CORE_SKILLS</div>
                 <div class="bio-line"><span class="bio-key">> LUA:</span> MTA / FiveM Scripts</div>
+                <div class="bio-line"><span class="bio-key">> WEB:</span> HTML / CSS / JS</div>
                 <div class="bio-line"><span class="bio-key">> SEC:</span> Cyber Security Specialist</div>
             </div>
         </div>
 
-        <div class="stats-container">
-            <div class="stat-item">
-                <span style="color: var(--neon-blue); font-size: 1.5rem; font-weight: bold;">4+</span><br>
-                <span style="color: #888; font-size: 0.7rem;">ACTIVE PROJECTS</span>
-            </div>
-            <div class="stat-item">
-                <span style="color: var(--neon-blue); font-size: 1.5rem; font-weight: bold;">Online</span><br>
-                <span style="color: #888; font-size: 0.7rem;">SYSTEM STATUS</span>
-            </div>
+        <div class="stats-row">
+            <div class="stat-card"><span class="stat-val">4+</span><span class="stat-lbl">Active Projects</span></div>
+            <div class="stat-card"><span class="stat-val">1500+</span><span class="stat-lbl">Lines of Code</span></div>
+            <div class="stat-card"><span class="stat-val" style="color: #0f0;">Online</span><span class="stat-lbl">System Status</span></div>
         </div>
 
-        <h2 style="color: var(--neon-blue); margin-top: 50px;">ACTIVE OPERATIONS</h2>
-        <div class="ops-grid">
-            <div class="project-card">
+        <div class="bot-ops-card">
+            <i class="fas fa-robot bot-icon"></i>
+            <div>
+                <h3 style="margin: 0; color: var(--neon-blue);">BOT OPERATIONS</h3>
+                <p style="margin: 5px 0; color: #aaa; font-size: 0.9rem;">Security Bot: Checks bad links & gives ✅ to safe ones.</p>
+            </div>
+            <button class="btn-topgg" onclick="window.open('https://top.gg/bot/1488965929810526308')">TOP.GG</button>
+        </div>
+
+        <h2 style="text-align: center; color: var(--neon-blue); letter-spacing: 3px; font-family: monospace;">ACTIVE OPERATIONS</h2>
+        
+        <div class="projects-grid">
+            <div class="card">
                 <div style="display: flex; justify-content: space-between;">
                     <strong>Knightfall (Auth)</strong>
-                    <span style="font-size: 0.6rem; color: var(--neon-purple);">P0 - HIGH</span>
+                    <span style="font-size: 0.7rem; background: #200; color: var(--neon-purple); padding: 2px 5px;">P0 - High</span>
                 </div>
-                <div class="progress-bg"><div class="progress-fill" style="width: 85%;"></div></div>
-                <div style="font-size: 0.7rem; color: #888;">Status: 🏗️ Working</div>
+                <div class="prog-bar"><div class="prog-fill" style="width: 85%;"></div></div>
+                <div style="font-size: 0.8rem; color: #888;">Status: 🏗️ Working</div>
             </div>
+            <div class="card">
+                <div style="display: flex; justify-content: space-between;">
+                    <strong>Shield AI Bot</strong>
+                    <span style="font-size: 0.7rem; background: #022; color: var(--neon-blue); padding: 2px 5px;">P1 - Med</span>
+                </div>
+                <div class="prog-bar"><div class="prog-fill" style="width: 15%;"></div></div>
+                <div style="font-size: 0.8rem; color: #888;">Status: ⏳ Waiting</div>
             </div>
-    </section>
+        </div>
+    </div>
+
+    <div id="logs-panel"></div>
 
     <script>
-        // كود الماتريكس للانترو وللخلفية
-        const setupMatrix = (canvasId, color, speed) => {
+        // Matrix Engine
+        const setupMatrix = (canvasId, color) => {
             const canvas = document.getElementById(canvasId);
             const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            const letters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            const fontSize = 16;
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ$#@&*%";
+            const fontSize = 14;
             const columns = canvas.width / fontSize;
             const drops = Array(Math.floor(columns)).fill(1);
 
@@ -187,38 +202,66 @@
                 ctx.fillStyle = color;
                 ctx.font = fontSize + "px monospace";
                 for (let i = 0; i < drops.length; i++) {
-                    const text = letters[Math.floor(Math.random() * letters.length)];
-                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                    ctx.fillText(chars[Math.floor(Math.random()*chars.length)], i*fontSize, drops[i]*fontSize);
+                    if (drops[i]*fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
                     drops[i]++;
                 }
-            }, speed);
+            }, 35);
         };
 
-        // تشغيل ماتريكس الانترو
-        let introInterval = setupMatrix('intro-canvas', '#bc13fe', 35);
-        // تشغيل ماتريكس الخلفية
-        setupMatrix('matrix-canvas-bg', '#bc13fe', 50);
+        // Initialize Background Matrix
+        let bgInterval = setupMatrix('bg-canvas', '#440066'); 
+        let introInterval = setupMatrix('intro-canvas', '#00ff00');
 
-        // إنهاء الانترو بعد 4 ثواني
-        setTimeout(() => {
-            document.getElementById('intro-wrapper').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('intro-wrapper').style.display = 'none';
-                document.body.style.overflow = 'auto';
-                clearInterval(introInterval);
-            }, 1500);
-        }, 4000);
+        // Intro Logic
+        const introTexts = ["CONNECTING TO DATABASE...", "LOADING SYSTEM...", "DECRYPTING...", "WELCOME DD1_JR"];
+        let step = 0;
+        const textEl = document.getElementById('intro-text');
+        const barEl = document.getElementById('loader-bar');
 
-        // لوق النظام (كما في صورتك)
-        const logsBox = document.getElementById('system-logs');
-        const msgs = ["[SUCCESS] 4 items found.", "[INFO] Daniel identity verified.", "[SUCCESS] Connection encrypted."];
+        const introSequence = setInterval(() => {
+            step++;
+            if(step < introTexts.length) {
+                textEl.innerText = introTexts[step];
+                barEl.style.width = (step * 33) + "%";
+            } else {
+                clearInterval(introSequence);
+                document.getElementById('intro-overlay').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('intro-overlay').style.display = 'none';
+                    document.getElementById('site-content').style.opacity = '1';
+                    clearInterval(introInterval);
+                }, 1000);
+            }
+        }, 1200);
+
+        // Toggle Functions
+        function toggleMatrix() {
+            const canvas = document.getElementById('bg-canvas');
+            canvas.style.display = canvas.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function toggleLogs() {
+            const panel = document.getElementById('logs-panel');
+            panel.style.display = panel.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        // Logs Stream
+        const logs = [
+            "[SUCCESS] 4 items found.",
+            "[WARNING] Unauthorized access blocked.",
+            "[INFO] Daniel identity verified.",
+            "[INFO] Fetching user data...",
+            "[SUCCESS] Connection encrypted."
+        ];
         setInterval(() => {
-            const p = document.createElement('p');
-            p.textContent = msgs[Math.floor(Math.random()*msgs.length)];
-            logsBox.appendChild(p);
-            if(logsBox.childNodes.length > 6) logsBox.removeChild(logsBox.firstChild);
-        }, 3000);
+            const p = document.createElement('div');
+            p.style.color = "#00d2ff";
+            p.style.marginBottom = "5px";
+            p.innerText = logs[Math.floor(Math.random()*logs.length)];
+            document.getElementById('logs-panel').prepend(p);
+            if(document.getElementById('logs-panel').childNodes.length > 8) document.getElementById('logs-panel').lastChild.remove();
+        }, 2000);
     </script>
 </body>
 </html>
