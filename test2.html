@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DD1_JR | ELITE CYBER OPERATIONS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;500;800&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        /* [1] أساسيات النظام والتحسينات البصرية المتقدمة */
+        :root {
+            --neon-purple: #bc13fe; --neon-blue: #00d2ff; --bg-dark: #020202; 
+            --card-bg: rgba(6, 6, 6, 0.95); --border-glow: rgba(188, 19, 254, 0.3);
+        }
+
+        * { cursor: crosshair !important; } /* تغيير شكل الماوس للكل */
+
+        body {
+            background-color: var(--bg-dark); color: #e0e0e0; font-family: 'JetBrains Mono', monospace;
+            margin: 0; overflow-x: hidden; height: 100vh; overflow-y: hidden;
+        }
+
+        /* تأثير خطوط الشاشة القديمة (CRT Scanlines) */
+        body::before {
+            content: " "; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 9998; background-size: 100% 2px, 3px 100%; pointer-events: none;
+        }
+
+        #intro-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 10000; display: flex;
+            flex-direction: column; justify-content: center; align-items: center;
+            transition: 1.5s cubic-bezier(1, 0, 0, 1);
+        }
+
+        .intro-logo-text { 
+            font-size: 6rem; font-weight: 900; color: white; 
+            text-shadow: 0 0 20px var(--neon-purple); letter-spacing: 20px;
+            animation: glitch 0.5s infinite;
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(2px, -2px); }
+            25% { transform: translate(-2px, 2px); }
+            50% { transform: translate(-2px, -2px); }
+            100% { transform: translate(2px, 2px); }
+        }
+
+        #bar { height: 100%; background: var(--neon-purple); box-shadow: 0 0 30px var(--neon-purple); width: 0%; transition: 0.1s; }
+
+        /* [2] تحسين الكروت (3D TILT EFFECT) */
+        .terminal-box, .bot-card, .project-card, .stat-item {
+            background: var(--card-bg); border: 1px solid #1a1a1a;
+            border-radius: 12px; padding: 30px; position: relative;
+            transform-style: preserve-3d; transform: perspective(1000px);
+            transition: transform 0.1s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .terminal-box:hover, .project-card:hover {
+            border-color: var(--neon-purple);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 20px var(--border-glow);
+        }
+
+        /* [3] العناصر العائمة الأصلية */
+        #matrix-canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.2; }
+        
+        .visitor-counter-fixed {
+            position: fixed; top: 20px; right: 25px; z-index: 2000;
+            display: flex; align-items: center; gap: 10px;
+            background: rgba(0,0,0,0.9); padding: 10px 15px; border: 1px solid var(--neon-purple);
+            border-radius: 4px; font-size: 0.8rem; box-shadow: 0 0 15px var(--border-glow);
+        }
+
+        .ui-controls { position: fixed; top: 20px; left: 25px; display: flex; gap: 15px; z-index: 1000; }
+        .ui-controls button {
+            background: #000; border: 1px solid var(--neon-purple); color: var(--neon-purple);
+            padding: 10px 20px; border-radius: 4px; font-family: 'Share Tech Mono';
+            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px;
+            transition: 0.3s;
+        }
+        .ui-controls button:hover { background: var(--neon-purple); color: #000; box-shadow: 0 0 20px var(--neon-purple); }
+
+        #system-logs {
+            position: fixed; bottom: 25px; right: 25px; width: 320px; height: 180px;
+            background: rgba(0,0,0,0.95); border: 1px solid #222; border-left: 3px solid var(--neon-blue);
+            padding: 15px; font-size: 0.7rem; color: var(--neon-blue); overflow: hidden;
+            z-index: 1000; pointer-events: none;
+        }
+
+        .neon-title {
+            font-size: clamp(4rem, 15vw, 7rem); font-weight: 800; text-align: center;
+            background: linear-gradient(90deg, #fff, var(--neon-blue), var(--neon-purple), #fff);
+            background-size: 300%; -webkit-background-clip: text; background-clip: text;
+            -webkit-text-fill-color: transparent; animation: flow 5s linear infinite;
+        }
+        @keyframes flow { 0% { background-position: 0%; } 100% { background-position: 300%; } }
+
+        /* [4] الهوية والمهارات */
+        .identity-wrapper {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 30px; width: 100%; max-width: 1200px; margin-top: 50px;
+        }
+
+        .bio-line { margin: 15px 0; font-size: 1rem; border-left: 2px solid transparent; padding-left: 10px; transition: 0.3s; }
+        .bio-line:hover { border-left: 2px solid var(--neon-blue); color: #fff; background: rgba(255,255,255,0.02); }
+        .bio-key { color: var(--neon-purple); font-weight: bold; margin-right: 10px; }
+
+        /* [5] نظام العمليات */
+        .ops-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px; width: 100%; max-width: 1200px; margin-top: 40px;
+        }
+
+        .progress-bg { background: #0a0a0a; height: 4px; border-radius: 2px; margin-top: 20px; position: relative; }
+        .progress-fill { height: 100%; background: var(--neon-blue); box-shadow: 0 0 10px var(--neon-blue); width: 0%; transition: 2s cubic-bezier(0.1, 0, 0, 1); }
+
+        footer { margin-top: 100px; padding: 40px; border-top: 1px solid #111; color: #333; font-size: 0.7rem; text-align: center; letter-spacing: 5px; }
+
+    </style>
+</head>
+<body>
+
+    <div id="intro-overlay">
+        <div class="intro-logo-text">DD1_JR</div>
+        <div style="font-family: 'Share Tech Mono'; color: var(--neon-purple); margin-top: 20px;">[ DECRYPTING_CORE_SYSTEM ]</div>
+        <div style="width: 250px; height: 2px; background: #111; margin-top: 20px;"><div id="bar"></div></div>
+    </div>
+
+    <canvas id="matrix-canvas"></canvas>
+
+    <div class="visitor-counter-fixed">
+        <i class="fas fa-satellite-dish" style="color: var(--neon-purple);"></i>
+        <img src="https://komarev.com/ghpvc/?username=Daniel-DD1JR-Stats&color=bc13fe&style=flat-square&label=TRAFFIC" alt="Visits">
+    </div>
+
+    <div id="system-logs"></div>
+
+    <div class="ui-controls">
+        <button onclick="toggleMatrix()">Stream: On</button>
+        <button onclick="toggleLogs()">Telemetry: On</button>
+    </div>
+
+    <section style="padding-top: 120px;">
+        <div class="logo-container">
+            <svg viewBox="0 0 100 100" style="width: 120px; filter: drop-shadow(0 0 20px var(--neon-purple));">
+                <circle cx="50" cy="50" r="48" stroke="var(--neon-purple)" stroke-width="0.5" fill="none" stroke-dasharray="10 5" />
+                <text x="50%" y="55%" text-anchor="middle" fill="white" font-size="50" font-family="monospace" font-weight="900">D</text>
+            </svg>
+        </div>
+
+        <h1 class="neon-title">DD1_JR</h1>
+
+        <div style="display:flex; gap:30px; margin: 20px 0;">
+            <a href="https://github.com/DanneKZ" target="_blank" style="color:#fff; font-size: 1.5rem;"><i class="fab fa-github"></i></a>
+            <a href="https://discord.com/users/1336353146020298816" target="_blank" style="color:#fff; font-size: 1.5rem;"><i class="fab fa-discord"></i></a>
+        </div>
+
+        <div class="identity-wrapper">
+            <div class="terminal-box" data-tilt>
+                <div style="color: var(--neon-blue); font-size: 0.8rem; margin-bottom: 20px;">// SUBJECT_DOSSIER</div>
+                <div class="bio-line"><span class="bio-key">> IDENTITY:</span> Daniel</div>
+                <div class="bio-line"><span class="bio-key">> STATUS:</span> Level 15 / Advanced</div>
+                <div class="bio-line"><span class="bio-key">> LINEAGE:</span> Iraq 🇮🇶 / Netherlands 🇳🇱</div>
+                <div class="bio-line"><span class="bio-key">> CURRENT_LOC:</span> Sweden 🇸🇪</div>
+            </div>
+            <div class="terminal-box" data-tilt style="border-right: 2px solid var(--neon-blue);">
+                <div style="color: var(--neon-purple); font-size: 0.8rem; margin-bottom: 20px;">// TECHNICAL_ARSENAL</div>
+                <div class="bio-line"><span class="bio-key">> SCRIPTING:</span> LUA Expert (FiveM/MTA)</div>
+                <div class="bio-line"><span class="bio-key">> FRONTEND:</span> Modern JS / CSS Frameworks</div>
+                <div class="bio-line"><span class="bio-key">> DEFENSE:</span> Cyber Security Analysis</div>
+                <div class="bio-line"><span class="bio-key">> REPO_ST:</span> Active Development</div>
+            </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap: 20px; width: 100%; max-width: 1200px; margin-top: 30px;">
+            <div class="stat-item">
+                <span style="color: var(--neon-blue); font-size: 1.8rem; font-weight: 800;">4+</span>
+                <p style="font-size: 0.6rem; color: #555;">ACTIVE_OPS</p>
+            </div>
+            <div class="stat-item">
+                <span id="code-lines" style="color: var(--neon-blue); font-size: 1.8rem; font-weight: 800;">0</span>
+                <p style="font-size: 0.6rem; color: #555;">LINES_PUSHED</p>
+            </div>
+            <div class="stat-item">
+                <span id="cpu-load" style="color: var(--neon-blue); font-size: 1.8rem; font-weight: 800;">0%</span>
+                <p style="font-size: 0.6rem; color: #555;">CORE_UTILITY</p>
+            </div>
+            <div class="stat-item">
+                <span style="color: var(--neon-blue); font-size: 1.8rem; font-weight: 800;">LIVE</span>
+                <p style="font-size: 0.6rem; color: #555;">UPTIME_S</p>
+            </div>
+        </div>
+
+        <div class="bot-card" style="margin-top: 40px; display:flex; align-items:center; width:100%; max-width:1200px;">
+            <div style="font-size: 3rem; color: var(--neon-blue); margin-right: 30px;"><i class="fas fa-shield-virus"></i></div>
+            <div style="flex:1">
+                <h4 style="margin:0; color: var(--neon-blue); letter-spacing: 2px;">SENTINEL_BOT_INIT</h4>
+                <p style="color: #666; font-size: 0.9rem; margin: 5px 0;">Neural link scanner active. Filtering malicious nodes in real-time.</p>
+            </div>
+            <a href="https://top.gg/bot/1488965929810526308" target="_blank" style="background: var(--neon-blue); color:#000; padding: 15px 30px; text-decoration:none; font-weight:800; border-radius: 4px;">ACCESS_BOT</a>
+        </div>
+    </section>
+
+    <section id="operations">
+        <h2 style="color: var(--neon-blue); font-family: 'Share Tech Mono'; letter-spacing: 10px; margin-bottom: 50px;">[ PROJECT_GRID ]</h2>
+        <div class="ops-grid" id="projects-container">
+            </div>
+    </section>
+
+    <footer>
+        <p>// CLASSIFIED DATA // DD1_JR // 2026 // NODE_STABLE</p>
+    </footer>
+
+    <script>
+        // [1] المحرك الأساسي - الإنترو
+        let progress = 0;
+        const bar = document.getElementById('bar');
+        const loadTimer = setInterval(() => {
+            progress += Math.random() * 8;
+            if (progress >= 100) {
+                progress = 100; clearInterval(loadTimer);
+                setTimeout(() => {
+                    document.getElementById('intro-overlay').style.opacity = '0';
+                    document.getElementById('intro-overlay').style.transform = 'translateY(-100%)';
+                    document.body.style.overflowY = 'auto';
+                    initSystem();
+                }, 500);
+            }
+            bar.style.width = progress + '%';
+        }, 80);
+
+        // [2] محرك الماتريكس المطوّر
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        const chars = "0123456789ABCDEF@#$%&*+=-";
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#bc13fe";
+            ctx.font = fontSize + "px monospace";
+            drops.forEach((y, i) => {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * fontSize, y * fontSize);
+                if (y * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            });
+        }
+        let mInterval = setInterval(drawMatrix, 50);
+
+        // [3] نظام الـ TILT (المؤثرات ثلاثية الأبعاد)
+        document.addEventListener('mousemove', (e) => {
+            const cards = document.querySelectorAll('[data-tilt]');
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 10;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+        });
+
+        // [4] تليمتري (الأرقام الحية)
+        function initSystem() {
+            // عداد أسطر الكود
+            let lines = 0;
+            const lineInt = setInterval(() => {
+                lines += 23;
+                document.getElementById('code-lines').innerText = lines;
+                if (lines >= 2500) { document.getElementById('code-lines').innerText = "2.5k+"; clearInterval(lineInt); }
+            }, 10);
+
+            // حمل المعالج الوهمي
+            setInterval(() => {
+                const load = Math.floor(Math.random() * 40) + 10;
+                document.getElementById('cpu-load').innerText = load + "%";
+            }, 2000);
+
+            // اللوجات
+            pushLog("KERNEL_INIT: SUCCESS");
+            pushLog("ENCRYPTION: AES_256_ACTIVE");
+            pushLog("LOCATION: STOCKHOLM_NODE");
+        }
+
+        const logs = document.getElementById('system-logs');
+        function pushLog(msg) {
+            const div = document.createElement('div');
+            div.innerHTML = `<span style="color:#444;">[${new Date().toLocaleTimeString()}]</span> > ${msg}`;
+            div.style.marginBottom = "5px";
+            logs.appendChild(div);
+            if (logs.childNodes.length > 8) logs.firstChild.remove();
+        }
+
+        function toggleMatrix() { 
+            const canvas = document.getElementById('matrix-canvas');
+            canvas.style.display = canvas.style.display === "none" ? "block" : "none";
+            pushLog("MATRIX_INTERFACE_TOGGLED");
+        }
+
+        function toggleLogs() {
+            logs.style.display = logs.style.display === "none" ? "block" : "none";
+        }
+
+        // [5] المشاريع
+        const projectsContainer = document.getElementById('projects-container');
+        const myProjects = [
+            { name: "NEURAL_SHIELD_AUTH", progress: 85 },
+            { name: "LUA_CORE_V4", progress: 95 },
+            { name: "CYBER_DASH_OS", progress: 60 }
+        ];
+
+        myProjects.forEach(p => {
+            projectsContainer.innerHTML += `
+                <div class="project-card" data-tilt>
+                    <div style="font-size:0.7rem; color:var(--neon-blue); font-family:'Share Tech Mono';">${p.name}</div>
+                    <div class="progress-bg"><div class="progress-fill" style="width:${p.progress}%"></div></div>
+                    <div style="margin-top:10px; font-size:0.6rem; color:#444;">STATUS: DEPLOYED_STABLE</div>
+                </div>
+            `;
+        });
+
+    </script>
+</body>
+</html>
