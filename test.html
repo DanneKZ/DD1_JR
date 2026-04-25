@@ -1,600 +1,396 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DD1_JR // NEURAL_WORKSTATION_V7</title>
+    <title>متحف الميمز الكوني | DD1_JR</title>
     
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=JetBrains+Mono:wght@100;400;800&family=Space+Grotesk:wght@300;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;900&family=Changa:wght@400;800&family=Permanent+Marker&display=swap" rel="stylesheet">
 
     <style>
-        /* [1] CSS CORE ARCHITECTURE 
-           Extended for maximum visual fidelity and line count.
+        /* [SECTION 1] CSS MASTER DESIGN - EXPANDED 
+           كل خاصية في سطر منفصل لجعل الكود ضخماً وواضحاً
         */
         :root {
-            --p-glow: #bc13fe;
-            --b-glow: #00d2ff;
-            --g-glow: #39ff14;
-            --r-glow: #ff3131;
-            --bg-ultra: #020205;
-            --glass: rgba(10, 10, 15, 0.9);
-            --border: 1px solid rgba(188, 19, 254, 0.3);
-            --font-main: 'Space Grotesk', sans-serif;
-            --font-mono: 'JetBrains Mono', monospace;
-            --font-header: 'Orbitron', sans-serif;
+            --neon-yellow: #fff200;
+            --neon-pink: #ff00ff;
+            --neon-cyan: #00ffff;
+            --meme-bg: #0a0a0a;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --font-arabic: 'Changa', sans-serif;
+            --font-funky: 'Permanent Marker', cursive;
         }
 
-        /* RESET & GLOBAL SCROLLING */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            user-select: none;
         }
 
         body {
-            background-color: var(--bg-ultra);
-            color: #fff;
-            font-family: var(--font-main);
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
+            background-color: var(--meme-bg);
+            color: white;
+            font-family: var(--font-arabic);
+            overflow-x: hidden;
+            min-height: 200vh;
+            cursor: url('https://cur.cursors-4u.net/games/gam-13/gam1214.cur'), auto;
         }
 
-        /* [2] LOADING SYSTEM - NEURAL INITIALIZATION
-        */
-        #neural-loader {
+        /* BACKGROUND ANIMATION */
+        #universe-bg {
             position: fixed;
-            inset: 0;
-            background: #000;
-            z-index: 10000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            transition: 1s ease-in-out;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, #1a0033 0%, #000 100%);
         }
 
-        .loader-ring {
-            width: 250px;
-            height: 250px;
-            border: 2px solid transparent;
-            border-top: 2px solid var(--p-glow);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            position: relative;
-        }
-
-        .loader-ring::before {
-            content: '';
+        .star {
             position: absolute;
-            inset: 10px;
-            border: 2px solid transparent;
-            border-bottom: 2px solid var(--b-glow);
+            background: white;
             border-radius: 50%;
-            animation: spin 2s linear infinite reverse;
+            opacity: 0.5;
+            animation: twinkle 2s infinite ease-in-out;
         }
 
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.5); }
         }
 
-        .loader-text {
-            margin-top: 30px;
-            font-family: var(--font-header);
-            letter-spacing: 10px;
-            font-size: 14px;
-            color: var(--p-glow);
-            text-shadow: 0 0 10px var(--p-glow);
-        }
-
-        /* [3] WORKSTATION LAYOUT 
-        */
-        #workstation {
-            display: grid;
-            grid-template-columns: 280px 1fr 320px;
-            grid-template-rows: 70px 1fr 40px;
+        /* HEADER & HERO */
+        .hero-section {
             height: 100vh;
-            width: 100vw;
-            gap: 15px;
-            padding: 15px;
-            background: radial-gradient(circle at top right, rgba(188, 19, 254, 0.05), transparent);
-            position: relative;
-            z-index: 5;
-        }
-
-        /* NEURAL BACKGROUND CANVAS */
-        #bg-canvas {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            opacity: 0.4;
-            pointer-events: none;
-        }
-
-        /* HEADER BAR */
-        .top-nav {
-            grid-column: 1 / 4;
-            background: var(--glass);
-            border: var(--border);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 30px;
-            backdrop-filter: blur(20px);
-        }
-
-        .brand-logo {
-            font-family: var(--font-header);
-            font-weight: 900;
-            font-size: 22px;
-            background: linear-gradient(90deg, #fff, var(--p-glow));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        /* LEFT SIDEBAR - TOOLS & UTILS */
-        .sidebar-left {
-            grid-column: 1;
-            background: var(--glass);
-            border: var(--border);
-            border-radius: 12px;
             display: flex;
             flex-direction: column;
-            padding: 20px;
-            backdrop-filter: blur(10px);
-        }
-
-        .module-card {
-            background: rgba(255,255,255,0.02);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 15px;
-            transition: 0.3s;
-        }
-
-        .module-card:hover {
-            border-color: var(--p-glow);
-            transform: scale(1.02);
-        }
-
-        .card-title {
-            font-family: var(--font-header);
-            font-size: 10px;
-            color: #555;
-            margin-bottom: 15px;
-            letter-spacing: 2px;
-        }
-
-        /* CENTER AREA - THE PRODUCTIVE HUB */
-        .workspace-hub {
-            grid-column: 2;
-            display: grid;
-            grid-template-rows: 1fr 300px;
-            gap: 15px;
-        }
-
-        /* CODE EDITOR COMPONENT */
-        .editor-container {
-            background: #050508;
-            border: var(--border);
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .editor-header {
-            height: 40px;
-            background: #0a0a0f;
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            justify-content: space-between;
-            border-bottom: 1px solid #111;
-        }
-
-        #code-input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: var(--b-glow);
-            font-family: var(--font-mono);
-            padding: 20px;
-            resize: none;
-            font-size: 14px;
-            line-height: 1.6;
-        }
-
-        /* TASK MANAGER COMPONENT */
-        .task-manager {
-            background: var(--glass);
-            border: var(--border);
-            border-radius: 12px;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .task-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .task-item {
-            background: rgba(255,255,255,0.03);
-            padding: 15px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-left: 3px solid var(--p-glow);
-        }
-
-        /* RIGHT SIDEBAR - ANALYTICS & MUSIC */
-        .sidebar-right {
-            grid-column: 3;
-            background: var(--glass);
-            border: var(--border);
-            border-radius: 12px;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        /* MUSIC PLAYER */
-        .music-player {
-            background: linear-gradient(135deg, rgba(188,19,254,0.1), rgba(0,210,255,0.1));
-            border-radius: 15px;
-            padding: 25px;
-            text-align: center;
-        }
-
-        .player-disc {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: #111;
-            margin: 0 auto 20px;
-            border: 5px solid #222;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            animation: spin 5s linear infinite;
-        }
-
-        /* FOOTER STATUS BAR */
-        .status-bar {
-            grid-column: 1 / 4;
-            background: var(--glass);
-            border: var(--border);
-            border-radius: 8px;
-            display: flex;
             align-items: center;
-            padding: 0 20px;
-            justify-content: space-between;
-            font-family: var(--font-mono);
-            font-size: 10px;
-            color: #666;
+            text-align: center;
+            position: relative;
         }
 
-        /* SCROLLBAR CUSTOMS */
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: var(--p-glow); border-radius: 10px; }
+        .main-title {
+            font-family: var(--font-funky);
+            font-size: 8rem;
+            color: var(--neon-yellow);
+            text-shadow: 10px 10px 0px var(--neon-pink);
+            transform: rotate(-5deg);
+            margin-bottom: 20px;
+        }
 
-        /* BUTTONS */
-        .btn-prime {
-            background: var(--p-glow);
-            color: #000;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            font-family: var(--font-header);
+        .sub-title {
+            font-size: 2rem;
+            background: white;
+            color: black;
+            padding: 5px 20px;
             font-weight: 900;
-            font-size: 10px;
+        }
+
+        /* MEME GALLERY GRID */
+        .gallery-container {
+            padding: 50px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .meme-card {
+            background: var(--card-bg);
+            border: 5px solid white;
+            border-radius: 0px;
+            overflow: hidden;
+            position: relative;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
+        }
+
+        .meme-card:hover {
+            transform: scale(1.05) rotate(2deg);
+            border-color: var(--neon-cyan);
+            box-shadow: 20px 20px 0px var(--neon-pink);
+        }
+
+        .meme-img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            filter: grayscale(100%);
+            transition: 0.5s;
+        }
+
+        .meme-card:hover .meme-img {
+            filter: grayscale(0%);
+        }
+
+        .meme-info {
+            padding: 20px;
+            background: white;
+            color: black;
+        }
+
+        .meme-info h3 {
+            font-size: 1.5rem;
+            font-weight: 900;
+        }
+
+        /* MEME GENERATOR SECTION */
+        .generator-box {
+            background: var(--neon-pink);
+            padding: 100px 20px;
+            text-align: center;
+            margin: 100px 0;
+            transform: skewY(-2deg);
+        }
+
+        .generator-box > * {
+            transform: skewY(2deg);
+        }
+
+        #meme-text-display {
+            font-size: 3rem;
+            font-weight: 900;
+            color: white;
+            text-shadow: 5px 5px 0px black;
+            margin-bottom: 40px;
+            min-height: 100px;
+        }
+
+        .magic-btn {
+            background: black;
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            font-size: 1.5rem;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 10px 10px 0px var(--neon-cyan);
+            transition: 0.2s;
+        }
+
+        .magic-btn:active {
+            transform: translate(5px, 5px);
+            box-shadow: 0px 0px 0px black;
+        }
+
+        /* FLOATING EMOJIS */
+        .floating-emoji {
+            position: fixed;
+            font-size: 2rem;
+            pointer-events: none;
+            z-index: 999;
+            animation: float-up 3s forwards;
+        }
+
+        @keyframes float-up {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-500px) rotate(360deg); opacity: 0; }
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 50px;
+            text-align: center;
+            border-top: 10px solid white;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .social-links i {
+            font-size: 3rem;
+            color: white;
             transition: 0.3s;
         }
 
-        .btn-prime:hover {
-            box-shadow: 0 0 15px var(--p-glow);
-            transform: translateY(-2px);
-        }
-
-        /* GLITCH CLASS */
-        .glitch-text:hover {
-            animation: glitch-anim 0.2s infinite;
-        }
-
-        @keyframes glitch-anim {
-            0% { transform: translate(0); text-shadow: 2px 0 red, -2px 0 blue; }
-            50% { transform: translate(-2px, 2px); text-shadow: -2px 0 red, 2px 0 blue; }
-            100% { transform: translate(2px, -2px); text-shadow: 2px 0 red, -2px 0 blue; }
+        .social-links i:hover {
+            color: var(--neon-yellow);
+            transform: scale(1.2);
         }
     </style>
 </head>
 <body>
 
-    <div id="neural-loader">
-        <div class="loader-ring"></div>
-        <div class="loader-text">INITIALIZING NEURAL LINK...</div>
-        <div id="loader-logs" style="color: #333; font-size: 10px; margin-top: 20px; font-family: var(--font-mono);">
+    <div id="universe-bg"></div>
+
+    <section class="hero-section">
+        <div class="animate__animated animate__bounceIn">
+            <h1 class="main-title">MEME MUSEUM</h1>
+            <p class="sub-title">أهلاً بك في عالم دانيال للميمز اللانهائية</p>
+        </div>
+        <div style="margin-top: 50px;">
+            <i class="fas fa-chevron-down animate__animated animate__infinite animate__bounce" style="font-size: 3rem;"></i>
+        </div>
+    </section>
+
+    <section class="gallery-container">
+        <div class="meme-card" onclick="playSound('doge')">
+            <img src="https://i.imgflip.com/4/4t0m5.jpg" class="meme-img" alt="Doge">
+            <div class="meme-info">
+                <h3>السيد دووج العظيم</h3>
+                <p>ملك العملات المشفرة والصبر الطويل.</p>
             </div>
-    </div>
+        </div>
 
-    <canvas id="bg-canvas"></canvas>
+        <div class="meme-card" onclick="playSound('cat')">
+            <img src="https://i.imgflip.com/1otk96.jpg" class="meme-img" alt="Cat">
+            <div class="meme-info">
+                <h3>قطة التذمر</h3>
+                <p>الحالة النفسية لكل مبرمج يوم الاثنين.</p>
+            </div>
+        </div>
 
-    <div id="workstation">
+        <div class="meme-card" onclick="playSound('stonks')">
+            <img src="https://i.kym-cdn.com/entries/icons/original/000/029/959/Screen_Shot_2019-06-05_at_1.26.32_PM.jpg" class="meme-img" alt="Stonks">
+            <div class="meme-info">
+                <h3>STONKS 📈</h3>
+                <p>عندما تشتري عملة بـ 1$ وتبيعها بـ 1.01$</p>
+            </div>
+        </div>
+
+        <div class="meme-card" onclick="playSound('wow')">
+            <img src="https://i.imgflip.com/1bij.jpg" class="meme-img" alt="One Does Not Simply">
+            <div class="meme-info">
+                <h3>قاعدة بورومير</h3>
+                <p>لا يمكن للمرء ببساطة أن يتوقف عن الضحك.</p>
+            </div>
+        </div>
         
-        <header class="top-nav">
-            <div class="brand-logo glitch-text">
-                <i class="fas fa-brain"></i>
-                <span>DD1_JR // V7</span>
+        <div class="meme-card" onclick="playSound('laugh')">
+            <img src="https://i.imgflip.com/9ehk.jpg" class="meme-img" alt="Success Kid">
+            <div class="meme-info">
+                <h3>طفل النجاح</h3>
+                <p>عندما تنجح الكود من أول مرة بدون Error.</p>
             </div>
+        </div>
 
-            <div style="display:flex; gap:40px;">
-                <div style="text-align: center;">
-                    <div style="font-size: 18px; font-weight: 900; color: var(--b-glow);" id="cpu-load">05%</div>
-                    <div style="font-size: 8px; color: #444; letter-spacing: 2px;">CPU_UTILITY</div>
-                </div>
-                <div style="text-align: center;">
-                    <div style="font-size: 18px; font-weight: 900; color: var(--p-glow);" id="net-speed">1.2GB/s</div>
-                    <div style="font-size: 8px; color: #444; letter-spacing: 2px;">NEURAL_SYNC</div>
-                </div>
+        <div class="meme-card" onclick="playSound('horn')">
+            <img src="https://i.imgflip.com/gruep.jpg" class="meme-img" alt="Distracted Boyfriend">
+            <div class="meme-info">
+                <h3>الخيانة البرمجية</h3>
+                <p>أنا، مشروعي الحالي، تقنية جديدة ظهرت بالأمس.</p>
             </div>
+        </div>
+    </section>
 
-            <div style="display:flex; gap:15px; align-items:center;">
-                <div id="clock" style="font-family: var(--font-mono); font-weight: 800; color: #888;">00:00:00</div>
-                <button class="btn-prime">SAVE_SESSION</button>
-            </div>
-        </header>
+    <section class="generator-box">
+        <h2 style="font-size: 2rem; margin-bottom: 20px;">مولد حكم الميمز العشوائي</h2>
+        <div id="meme-text-display">اضغط على الزر لاكتشاف قدرك...</div>
+        <button class="magic-btn" onclick="generateMemeQuote()">أعطني حكمة ميمية!</button>
+    </section>
 
-        <aside class="sidebar-left">
-            <div class="module-card">
-                <div class="card-title">PROJECT_INFO</div>
-                <h3 style="font-size: 16px; margin-bottom: 5px;">ALPHA_GATE</h3>
-                <p style="font-size: 12px; color: #666;">Security layer for neural encryption nodes.</p>
-                <div style="margin-top: 15px; display: flex; gap: 5px;">
-                    <span style="background: rgba(0,210,255,0.1); color: var(--b-glow); font-size: 8px; padding: 3px 7px; border-radius: 10px;">ACTIVE</span>
-                    <span style="background: rgba(188,19,254,0.1); color: var(--p-glow); font-size: 8px; padding: 3px 7px; border-radius: 10px;">PRIVATE</span>
-                </div>
-            </div>
+    <footer>
+        <h2 style="font-family: var(--font-funky); font-size: 3rem; margin-bottom: 30px;">DANIEL_JR // 2026</h2>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-tiktok"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+            <a href="#"><i class="fab fa-discord"></i></a>
+        </div>
+        <p style="color: #666; font-size: 0.8rem; letter-spacing: 5px;">تمت البرمجة بجرعة زائدة من الضحك</p>
+    </footer>
 
-            <div class="module-card">
-                <div class="card-title">QUICK_UTILS</div>
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                    <button style="background: #111; border: 1px solid #222; color: #fff; padding: 10px; border-radius: 8px; font-size: 12px;"><i class="fas fa-terminal"></i></button>
-                    <button style="background: #111; border: 1px solid #222; color: #fff; padding: 10px; border-radius: 8px; font-size: 12px;"><i class="fas fa-search"></i></button>
-                    <button style="background: #111; border: 1px solid #222; color: #fff; padding: 10px; border-radius: 8px; font-size: 12px;"><i class="fas fa-bug"></i></button>
-                    <button style="background: #111; border: 1px solid #222; color: #fff; padding: 10px; border-radius: 8px; font-size: 12px;"><i class="fas fa-shield-alt"></i></button>
-                </div>
-            </div>
-
-            <div style="margin-top: auto; padding: 15px; text-align: center;">
-                <img src="https://komarev.com/ghpvc/?username=Daniel-DD1JR-V7&color=bc13fe&style=flat-square&label=VISITOR_ID" style="width: 100%;">
-            </div>
-        </aside>
-
-        <main class="workspace-hub">
-            <div class="editor-container">
-                <div class="editor-header">
-                    <span style="font-size: 10px; font-family: var(--font-header); color: #444;">DANIEL_SCRIPT_EDITOR.LUA</span>
-                    <div style="display:flex; gap:5px;">
-                        <div style="width:10px; height:10px; border-radius:50%; background: #ff5f56;"></div>
-                        <div style="width:10px; height:10px; border-radius:50%; background: #ffbd2e;"></div>
-                        <div style="width:10px; height:10px; border-radius:50%; background: #27c93f;"></div>
-                    </div>
-                </div>
-                <textarea id="code-input" spellcheck="false">-- Initializing Shield Protocol...
-function main_gate()
-    local access = "DD1_JR_V7"
-    if security.level > 9 then
-        print("Neural Link Established to: " .. access)
-        system.deploy_vanguards()
-    end
-end
-
-main_gate()</textarea>
-            </div>
-
-            <div class="task-manager">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 20px;">
-                    <h2 style="font-family: var(--font-header); font-size: 14px;">NEURAL_TASKS</h2>
-                    <button class="btn-prime" onclick="addTask()">+ NEW_TASK</button>
-                </div>
-                <div class="task-list" id="task-container">
-                    <div class="task-item">
-                        <div>
-                            <div style="font-weight: 700;">Rewrite Encryption Kernel</div>
-                            <div style="font-size: 10px; color: #555;">Due: 2026-05-12 // Priority: HIGH</div>
-                        </div>
-                        <i class="fas fa-check-circle" style="color: var(--g-glow);"></i>
-                    </div>
-                    <div class="task-item" style="border-left-color: var(--b-glow);">
-                        <div>
-                            <div style="font-weight: 700;">Sync Swedish Security Nodes</div>
-                            <div style="font-size: 10px; color: #555;">Due: 2026-05-14 // Priority: MED</div>
-                        </div>
-                        <i class="fas fa-clock" style="color: var(--b-glow);"></i>
-                    </div>
-                </div>
-            </div>
-        </main>
-
-        <aside class="sidebar-right">
-            <div class="music-player">
-                <div class="player-disc">
-                    <i class="fas fa-music fa-2x" style="color: var(--p-glow);"></i>
-                </div>
-                <h4 id="song-name">LO-FI NEURAL BEATS</h4>
-                <p style="font-size: 10px; color: #888; margin-bottom: 15px;">STATION: STOCKHOLM_RADIO</p>
-                <div style="display:flex; justify-content: center; gap: 20px;">
-                    <i class="fas fa-step-backward"></i>
-                    <i class="fas fa-play" id="play-btn"></i>
-                    <i class="fas fa-step-forward"></i>
-                </div>
-            </div>
-
-            <div class="module-card" style="flex: 1;">
-                <div class="card-title">ENVIRONMENT_STATS</div>
-                <div style="text-align: center; margin: 20px 0;">
-                    <i class="fas fa-cloud-moon fa-3x" style="color: #888;"></i>
-                    <div style="font-size: 30px; font-weight: 900; margin-top: 10px;">12°C</div>
-                    <div style="font-size: 10px; color: #444;">STOCKHOLM, SWEDEN</div>
-                </div>
-                <hr style="border: 0; border-top: 1px solid #111; margin: 15px 0;">
-                <div style="font-size: 11px;">
-                    <div style="display:flex; justify-content:space-between; margin-bottom: 5px;">
-                        <span>HUMIDITY</span><span style="color: var(--b-glow);">44%</span>
-                    </div>
-                    <div style="display:flex; justify-content:space-between;">
-                        <span>WIND_SPEED</span><span style="color: var(--b-glow);">12km/h</span>
-                    </div>
-                </div>
-            </div>
-        </aside>
-
-        <footer class="status-bar">
-            <div><i class="fas fa-check-double" style="color: var(--g-glow);"></i> KERNEL_ACTIVE: DD1_OS_V7.4</div>
-            <div>DANIEL // DD1_JR // WORKSTATION_2026</div>
-            <div>LATENCY: <span id="ping-val">12</span>ms // STABILITY: 99.98%</div>
-        </footer>
-    </div>
+    <audio id="sound-doge" src="https://www.myinstants.com/media/sounds/doge.mp3"></audio>
+    <audio id="sound-wow" src="https://www.myinstants.com/media/sounds/anime-wow.mp3"></audio>
+    <audio id="sound-laugh" src="https://www.myinstants.com/media/sounds/troll-face-laugh-sound-effect.mp3"></audio>
 
     <script>
-        // 1. NEURAL BOOT SEQUENCE
-        const loaderLogs = [
-            "DECOMPRESSING_V7_ASSETS...",
-            "INITIALIZING_PHYSICS_ENGINE...",
-            "LINKING_STOCKHOLM_SERVER...",
-            "DECRYPTING_DANIEL_PROFILE...",
-            "VULKAN_RENDERER_STARTED...",
-            "SHIELD_AI_VERSION_STABLE...",
-            "MOUNTING_USER_INTERFACE...",
-            "SYSTEM_READY_STABLE_V7"
+        // 1. تفعيل النجوم في الخلفية
+        function createStars() {
+            const bg = document.getElementById('universe-bg');
+            for (let i = 0; i < 200; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                const size = Math.random() * 3 + 'px';
+                star.style.width = size;
+                star.style.height = size;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                bg.appendChild(star);
+            }
+        }
+        createStars();
+
+        // 2. مولد الحكم الميمية
+        const quotes = [
+            "الحياة قصيرة، اجعل ميمزك طويلة.",
+            "لا تترك الكود يعمل، اذهب ونم.",
+            "إذا لم يضحك أحد على ميمك، فأنت مبرمج عظيم.",
+            "الستوكس تذهب وتأتي، لكن الـ Doge للأبد.",
+            "كن مثل قطة التذمر، لا تثق بأحد.",
+            "النجاح هو أن تجد ميم قديم وتجعله تريند مجدداً.",
+            "ما فائدة العقل إذا لم يكن فيه ميمز؟",
+            "دانيال هو الملك، والميمز هي الشعب."
         ];
 
-        function startBoot() {
-            const logBox = document.getElementById('loader-logs');
-            let idx = 0;
-            const bootInt = setInterval(() => {
-                if(idx < loaderLogs.length) {
-                    const l = document.createElement('div');
-                    l.innerText = `> ${loaderLogs[idx]}`;
-                    logBox.appendChild(l);
-                    idx++;
-                } else {
-                    clearInterval(bootInt);
-                    setTimeout(() => {
-                        document.getElementById('neural-loader').style.opacity = '0';
-                        setTimeout(() => document.getElementById('neural-loader').remove(), 1000);
-                        initGraphics();
-                    }, 500);
+        function generateMemeQuote() {
+            const display = document.getElementById('meme-text-display');
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            
+            // إضافة تأثير انيميشن عند التغيير
+            display.classList.remove('animate__animated', 'animate__rubberBand');
+            void display.offsetWidth; // Trigger reflow
+            display.innerText = randomQuote;
+            display.classList.add('animate__animated', 'animate__rubberBand');
+
+            // إطلاق إيموجي عائم
+            spawnEmoji();
+        }
+
+        // 3. نظام الإيموجي الطائر
+        function spawnEmoji() {
+            const emojis = ['😂', '🔥', '🚀', '📈', '🤡', '💀', '👽'];
+            const e = document.createElement('div');
+            e.className = 'floating-emoji';
+            e.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+            e.style.left = Math.random() * 100 + 'vw';
+            e.style.bottom = '0';
+            document.body.appendChild(e);
+            
+            setTimeout(() => e.remove(), 3000);
+        }
+
+        // 4. نظام الصوتيات
+        function playSound(type) {
+            let s;
+            if(type === 'doge') s = document.getElementById('sound-doge');
+            else if(type === 'wow') s = document.getElementById('sound-wow');
+            else s = document.getElementById('sound-laugh');
+            
+            if(s) {
+                s.currentTime = 0;
+                s.play();
+            }
+        }
+
+        // 5. تتبع الماوس (تأثير بصري إضافي)
+        document.addEventListener('mousemove', (e) => {
+            const stars = document.querySelectorAll('.star');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            stars.forEach((s, i) => {
+                if(i % 5 === 0) {
+                    s.style.transform = `translate(${x * 20}px, ${y * 20}px)`;
                 }
-            }, 150);
-        }
-        startBoot();
-
-        // 2. BACKGROUND GRAPHICS (NEURAL NETWORK)
-        function initGraphics() {
-            const canvas = document.getElementById('bg-canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-
-            let particles = [];
-            for(let i=0; i<150; i++) {
-                particles.push({
-                    x: Math.random()*canvas.width,
-                    y: Math.random()*canvas.height,
-                    vx: (Math.random()-0.5)*0.4,
-                    vy: (Math.random()-0.5)*0.4
-                });
-            }
-
-            function draw() {
-                ctx.clearRect(0,0,canvas.width, canvas.height);
-                ctx.strokeStyle = "rgba(188, 19, 254, 0.1)";
-                ctx.beginPath();
-                particles.forEach((p, i) => {
-                    p.x += p.vx; p.y += p.vy;
-                    if(p.x < 0 || p.x > canvas.width) p.vx *= -1;
-                    if(p.y < 0 || p.y > canvas.height) p.vy *= -1;
-
-                    particles.slice(i+1).forEach(p2 => {
-                        let d = Math.hypot(p.x-p2.x, p.y-p2.y);
-                        if(d < 120) {
-                            ctx.moveTo(p.x, p.y);
-                            ctx.lineTo(p2.x, p2.y);
-                        }
-                    });
-                });
-                ctx.stroke();
-                requestAnimationFrame(draw);
-            }
-            draw();
-        }
-
-        // 3. SYSTEM MONITORS & CLOCK
-        setInterval(() => {
-            document.getElementById('clock').innerText = new Date().toLocaleTimeString();
-            document.getElementById('cpu-load').innerText = (Math.random()*15 + 2).toFixed(0).padStart(2, '0') + "%";
-            document.getElementById('ping-val').innerText = Math.floor(Math.random()*5 + 10);
-        }, 1000);
-
-        // 4. TASK MANAGER LOGIC
-        function addTask() {
-            const taskName = prompt("Enter Task Description:");
-            if(taskName) {
-                const container = document.getElementById('task-container');
-                const div = document.createElement('div');
-                div.className = "task-item";
-                div.style.borderLeftColor = "var(--g-glow)";
-                div.innerHTML = `
-                    <div>
-                        <div style="font-weight: 700;">${taskName.toUpperCase()}</div>
-                        <div style="font-size: 10px; color: #555;">Due: NEW_ENTRY // Priority: URGENT</div>
-                    </div>
-                    <i class="fas fa-circle-notch fa-spin" style="color: var(--p-glow);"></i>
-                `;
-                container.prepend(div);
-            }
-        }
-
-        // 5. MUSIC PLAYER TOGGLE
-        let isPlaying = false;
-        document.getElementById('play-btn').addEventListener('click', function() {
-            isPlaying = !isPlaying;
-            this.className = isPlaying ? "fas fa-pause" : "fas fa-play";
-            document.getElementById('song-name').style.color = isPlaying ? "var(--p-glow)" : "#fff";
+            });
         });
 
-        // 6. WINDOW RESIZE HANDLING
-        window.addEventListener('resize', () => {
-            const canvas = document.getElementById('bg-canvas');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
+        // رسالة ترحيبية في الكونسول
+        console.log("%c مرحباً بك في متحف دانيال للميمز! %c لا تحاول اختراقنا، نحن فقط نضحك. ", 
+            "color: yellow; background: black; font-size: 20px; font-weight: bold;", 
+            "color: pink; font-size: 15px;");
 
-        // 7. KEYBOARD SHORTCUTS (ADVANCED)
-        document.addEventListener('keydown', (e) => {
-            if(e.ctrlKey && e.key === 's') {
-                e.preventDefault();
-                alert("SESSION_SAVED_TO_DD1_CLOUD");
-            }
-        });
-
-        console.log("%c DD1_JR NEURAL OS V7.4 LOADING SUCCESSFUL ", "background: #bc13fe; color: #000; font-weight: bold; padding: 10px;");
     </script>
 </body>
 </html>
